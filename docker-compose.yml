@@ -1,8 +1,21 @@
 version: '3.8'
+
 services:
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: always
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
     ports:
-      - "6379:6379"
+      - '${PORT:-3000}:3000'
+networks:
+  secure_chat_network:
+    external: true
+  postgres_network:
+    external: true
+  redis_network:
+    external: true
